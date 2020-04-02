@@ -7,10 +7,9 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="mobile-web-app-capable" content="yes">
 
-        <title>ONLYOFFICE Presentations</title>
+        <title>ONLYOFFICE Document Editor</title>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
-        <!-- App styles -->
 
         <!-- splash -->
 
@@ -160,27 +159,40 @@
     </head>
     <body>
     <div id="loading-mask" class="loadmask">
-        <div class="brendpanel">
-            <div>
-                <div class="circle"></div>
-                <div class="loading-logo">
+            <div class="brendpanel">
+                <div>
+                    <div class="circle"></div>
+                    <div class="loading-logo">
+                    </div>
+                    <div class="circle"></div>
                 </div>
-                <div class="circle"></div>
             </div>
-        </div>
-        <div class="placeholder">
-            <div class="slide-h">
-                <div class="slide-v">
-                    <div class="slide-container">
-                        <div class="line"></div>
-                        <div class="line empty"></div>
-                        <div class="line"></div>
+            <div class="placeholder">
+                <div class="slide-h">
+                    <div class="slide-v">
+                        <div class="slide-container">
+                            <div class="line"></div>
+                            <div class="line empty"></div>
+                            <div class="line"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
         <script type="text/javascript">
+            var ua = navigator.userAgent;
+
+            if (/Sailfish/.test(ua) || /Jolla/.test(ua)) {
+                document.write('<script type="text/javascript" src="../../../vendor/iscroll/iscroll.min.js"><\/script>');
+
+                    if (!/Android/.test(ua)) {
+                        var ua = navigator.userAgent + ';Android 5.0;';
+                        Object.defineProperty(navigator, 'userAgent', {
+                            get: function () { return ua; }
+                        });
+                    }
+            }
+
             function getUrlParams() {
                 var e,
                     a = /\+/g,  // Regex for replacing addition symbol with a space
@@ -208,7 +220,7 @@
                 logo = /*params["headerlogo"] ? encodeUrlParam(params["headerlogo"]) : */null;
             var logoOO = null;
             if (!logo) {
-                logoOO = /Android/.test(navigator.userAgent) ? "../../common/mobile/resources/img/header/header-logo-android.png" : "../../common/mobile/resources/img/header/header-logo-ios.png";
+                logoOO = /Android/.test(navigator.userAgent) ? "../../../apps/presentationeditor/mobile/resources/img/header/header-logo-android.png" : "../../../apps/presentationeditor/mobile/resources/img/header/header-logo-ios.png";
             }
 
                 window.frameEditorId = params["frameEditorId"];
@@ -230,29 +242,6 @@
             if (placeholder && /Android/.test(navigator.userAgent)) {
                 placeholder.classList.add('android');
             }
-        </script>
-
-        <script type="text/javascript" src="../../../vendor/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="../../../vendor/xregexp/xregexp-all-min.js"></script>
-
-        <script type="text/javascript" src="../../../../sdkjs/develop/sdkjs/slide/scripts.js"></script>
-        <script>
-            var ua = navigator.userAgent;
-
-            if (/Sailfish/.test(ua) || /Jolla/.test(ua)) {
-                document.write('<script type="text/javascript" src="../../../vendor/iscroll/iscroll.min.js"><\/script>');
-
-                    if (!/Android/.test(ua)) {
-                        var ua = navigator.userAgent + ';Android 5.0;';
-                        Object.defineProperty(navigator, 'userAgent', {
-                            get: function () { return ua; }
-                        });
-                    }
-            }
-
-            window.sdk_scripts.forEach(function(item){
-                document.write('<script type="text/javascript" src="' + item + '"><\/script>');
-            });
 
             window.requireTimeourError = function(){
                 var reqerr;
@@ -265,9 +254,20 @@
 
                 return reqerr;
             };
-        </script>
-        <!-- application -->
-        <script data-main="app-dev" src="../../../vendor/requirejs/require.js"></script>
 
+            var requireTimeoutID = setTimeout(function(){
+                window.alert(window.requireTimeourError());
+                window.location.reload();
+            }, 30000);
+
+            var require = {
+                waitSeconds: 30,
+                callback: function(){
+                    clearTimeout(requireTimeoutID);
+                }
+            };
+        </script>
+
+        <script data-main="app" src="../../../vendor/requirejs/require.js"></script>
     </body>
 </html>
